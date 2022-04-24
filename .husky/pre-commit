@@ -1,4 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 . "$(dirname "$0")/_/husky.sh"
 
 npx lint-staged
+
+# Trufflehog secret detection
+docker pull trufflesecurity/trufflehog:latest
+
+# MSYS... is used to prevent the path from getting mangled
+MSYS_NO_PATHCONV=1 docker run -v $PWD:/repo trufflesecurity/trufflehog:latest git "file:///repo" -j --only-verified
